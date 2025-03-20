@@ -1,2 +1,0 @@
-This project is used for collecting of various payments for donations.
-It has various functional collection fees from various people.
