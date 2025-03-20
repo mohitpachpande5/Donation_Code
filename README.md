@@ -48,13 +48,13 @@ The project uses the following dependencies:
 The project uses the following dependencies:
 
 - *PostgreSQL JDBC Driver*: For connecting to the PostgreSQL database.
-  xml
+ ```xml
   <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>42.6.0</version>
   </dependency>
-  
+  ```
 
 ---
 
