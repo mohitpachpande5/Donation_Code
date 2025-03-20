@@ -218,7 +218,8 @@ public class JDBC_Project1 {
 				ch=sc.nextInt();
 				sc.nextLine();
 			} while (ch==1);
-						
+			System.out.println("-----------------Thank you.----------------------");		
+			
 			sc.close();
 	}
 }
