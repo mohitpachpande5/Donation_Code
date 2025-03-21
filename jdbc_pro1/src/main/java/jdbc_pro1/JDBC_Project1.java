@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class JDBC_Project1 {
 	Scanner sc = new Scanner(System.in);
 	public static void createDB(String dbName) throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/","postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/","postgres","mohit1234");
 		String query="create database "+dbName;
 		Statement stmt = con.createStatement();
 		stmt.execute(query);
@@ -21,7 +21,7 @@ public class JDBC_Project1 {
 	}
 	
 	public static void createTbl(String dbName, String tblName) throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
 		Statement stmt = con.createStatement();
 		ResultSet rs = con.getMetaData().getTables(null, null, tblName, null);
 	    if (rs.next()) {
@@ -37,7 +37,7 @@ public class JDBC_Project1 {
 	}
 	
 	public static void insertTbl(String dbName, String tblName,int id,String name,double amount)throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
 		String query="INSERT INTO "+tblName+" VALUES(?,?,?)";
 		PreparedStatement pstmt = con.prepareStatement(query);
 		pstmt.setInt(1, id);
@@ -50,7 +50,7 @@ public class JDBC_Project1 {
 	}
 	
 	public static void updateTbl(String dbName, String tblName,int id,String name,double amount)throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
 		String query1="SELECT amount FROM "+tblName+" WHERE id="+id;
 		Statement stmt = con.createStatement();
 		ResultSet rs= stmt.executeQuery(query1);
@@ -70,7 +70,7 @@ public class JDBC_Project1 {
 	}
 	
 	public static void retriveTbl(String dbName, String tblName)throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
 		String query="SELECT * FROM "+tblName;
 		Statement stmt = con.createStatement();
 		ResultSet rs= stmt.executeQuery(query);
@@ -82,8 +82,23 @@ public class JDBC_Project1 {
 		con.close();		
 	}
 	
+	public static void totalTbl(String dbName, String tblName)throws SQLException {
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
+		String query="SELECT SUM(amount) AS total_amount FROM " + tblName;
+		Statement stmt = con.createStatement();
+		ResultSet rs= stmt.executeQuery(query);
+		if (rs.next()) {
+	        double totalAmount = rs.getDouble("total_amount"); // Use the alias "total_amount"
+	        System.out.println("\n\nThe total amount collected for " + tblName + " is: " + totalAmount+"\n\n");
+	    } else {
+	        System.out.println("\n\nNo data found for " + tblName);
+	    }
+		stmt.close();
+		con.close();		
+	}
+	
 	public static void dropTbl(String dbName, String tblName) throws SQLException {
-		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","********");
+		Connection con= DriverManager.getConnection("jdbc:postgresql://localhost:2004/"+dbName,"postgres","mohit1234");
 		String query="drop table "+tblName;
 		Statement stmt = con.createStatement();
 		stmt.execute(query);
@@ -95,8 +110,8 @@ public class JDBC_Project1 {
 	public void ui(String tblname) {
 		String dbName="donation";
 		int choice=0;
-		while(choice!=7) {
-			System.out.println("Enter the choice: \n 1. create DB\n 2. New Type of Event\n 3. New Entry \n 4. Add new amount to existing \n 5. Show all donations\n 6. Delete Event\n 7. Exit");
+		while(choice!=8) {
+			System.out.println("Enter the choice: \n 1. create DB\n 2. New Type of Event\n 3. New Entry \n 4. Add new amount to existing \n 5. Show all donations\n 6. Show total Amount of event \n 7. Delete Event\n 8. Exit");
 			choice=sc.nextInt();
 			sc.nextLine();
 			switch (choice) {
@@ -157,6 +172,14 @@ public class JDBC_Project1 {
 				break;
 			case 6:
 				try {
+					totalTbl(dbName, tblname);
+				} catch (SQLException e) {
+					System.out.println("The Event does not Exists");
+					e.printStackTrace();
+				}
+				break;
+			case 7:
+				try {
 					System.out.println("Enter the donation type Event name(like: ganesh_chaturthi, holi, republic_day)");
 					tblname = sc.nextLine().replaceAll(" ", "_");
 					dropTbl(dbName,tblname);
@@ -165,7 +188,7 @@ public class JDBC_Project1 {
 					e.printStackTrace();
 				}
 				break;
-			case 7:
+			case 8:
 				break;
 		
 			default:
@@ -219,7 +242,6 @@ public class JDBC_Project1 {
 				sc.nextLine();
 			} while (ch==1);
 			System.out.println("-----------------Thank you.----------------------");		
-			
 			sc.close();
 	}
 }
